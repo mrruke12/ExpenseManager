@@ -4,7 +4,8 @@
 1. Конфигурация:
   1. скопируйте файл appsettings.template.json из папки `ExpenseManager/config` в папку `ExpenseManager/src/backend/ExpenseManager.WebAPI`; переименуйте файл в appsettings.json и заполните своими данными.
   2. скопируйте файл .env.template из папки `ExpenseManager/config` в папку `ExpenseManager/src/frontend`; переименуйте файл в .env и заполните своими данными.
-2.  откройте терминал и перейдите в папку `ExpenseManager/src/backend`, создав и применив миграцию: 
+2.  откройте терминал и перейдите в папку `ExpenseManager/src/`, выполните команду для создания сертификата `dotnet dev-certs https -ep certificate.pfx -p 123` (вместо 123 - ваш пароль, который вы указали в appsettings.json)
+3.  откройте терминал и перейдите в папку `ExpenseManager/src/backend`, создав и применив миграцию:
   1. `dotnet tool install --global dotnet-ef` (Если у вас не установлено средство EF)
   2. `dotnet ef migrations add InitialCreate --project ./ExpenseManager.Infrastructure --startup-project ./ExpenseManager.WebAPI`
   3. `dotnet ef database update --project ./ExpenseManager.Infrastructure --startup-project ./ExpenseManager.WebAPI`
