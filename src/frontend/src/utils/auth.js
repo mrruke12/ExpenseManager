@@ -1,5 +1,4 @@
 import api from '../api/api'
-import { useRouter } from 'vue-router'
 
 export const checkAuth = async () => {
   const token = localStorage.getItem('token')
@@ -20,7 +19,7 @@ export const checkAuth = async () => {
   }
 }
 
-export const logout = (router) => {
+export const Logout = (router) => {
   localStorage.removeItem('token')
   router.push("/auth")
 }

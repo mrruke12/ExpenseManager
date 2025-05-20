@@ -10,34 +10,16 @@ const router = createRouter({
             name: 'home',
             component: HomeView
         },
-        {
-          path: '/report',
-          name: 'report',
-          component: () => import('../views/ReportView.vue'),
-          meta: {requiresAuth: true}
-        },
-        {
-            path: '/auth',
-            name: "auth",
-            component: () => import("../views/AuthView.vue")
-        },
-        {
-            path: '/dashboard',
-            name: "dashboard",
-            meta: {requiresAuth: true},
-            component: () => import("../views/DashboardView.vue"),
-        }
     ]
 })
 
 router.beforeEach(async (to, from, next) => {
-    const token = localStorage.getItem('token')
     const isAuthenticated = await checkAuth()
 
-    if (to.meta.requiresAuth && (!token || !isAuthenticated)) {
-        next('/auth') // Перенаправляем на страницу входа
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        next('/auth')
     } else {
-        next() // Пропускаем
+        next()
     }
 })
 

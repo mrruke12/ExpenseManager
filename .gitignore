@@ -16,6 +16,7 @@ packages/
 appsettings.json
 appsettings.*.json
 .env
+certificate.pfx
 
 # Logs
 logs
