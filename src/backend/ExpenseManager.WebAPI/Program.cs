@@ -19,16 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//builder.WebHost.ConfigureKestrel(options => {
-//    options.ListenAnyIP(5000); // HTTP
-//    options.ListenAnyIP(5001, listenOptions => {
-//        listenOptions.UseHttps("localhost.pfx", "600362BD1BEB005466A82F32EC9772D5E1F2640C");
-//    });
-//});
-
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowVueDevClient", policy => {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(builder.Configuration["Frontend:Url"])
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

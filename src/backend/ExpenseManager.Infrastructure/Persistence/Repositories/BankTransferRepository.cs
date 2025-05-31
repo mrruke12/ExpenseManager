@@ -18,7 +18,7 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
 
         public async Task<bool> DeleteForUser(AppUser? user, int id) {
             if (user == null) return false;
-
+            if (GetByIdForUser(user, id) == null) return false;
             await _context.Transfers.Include(t => t.Account).Where(t => t.Id == id && t.Account.UserId == user.Id).ExecuteDeleteAsync();
             return true;
         }
@@ -29,10 +29,10 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
             return await _context.Transfers.Include(t => t.Account).FirstOrDefaultAsync(t => t.Id == id && t.Account.UserId == user.Id);
         }
 
-        public async Task<List<BankTransfer>?> GetTransfersForUser(AppUser? user, BankTransferFilter filter) {
-            if (user == null) return null;
+        public async Task<List<BankTransfer>> GetTransfersForUser(AppUser? user, BankTransferFilter filter) {
+            if (user == null) return new List<BankTransfer>();
 
-            var allTransfers = _context.Transfers.Include(t => t.Account).Where(t => t.Account.UserId == user.Id);
+            var allTransfers = _context.Transfers.Include(t => t.Category).Where(t => t.Category.UserId == user.Id);
             var filtered = FilterTransfers(allTransfers, filter);
 
             return filtered.ToList();
@@ -40,10 +40,10 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
 
         private IEnumerable<BankTransfer> FilterTransfers(IEnumerable<BankTransfer> allTransfers, BankTransferFilter filter) {
             var filtered = allTransfers.Where(t =>
-                                                       (t.Moment.Ticks >= filter.FromDate.Ticks && t.Moment.Ticks <= filter.ToDate.Ticks) &&
+                                                       (t.Moment >= filter.FromDate && t.Moment <= filter.ToDate) &&
                                                        (t.Bill >= filter.MinBill && t.Bill <= filter.MaxBill));
 
-            if (filter.CategoryId != null) filtered = filtered.Where(t => t.Category.Id == filter.CategoryId);
+            if (filter.CategoryId != null && filter.CategoryId != -1) filtered = filtered.Where(t => t.Category.Id == filter.CategoryId);
 
             return filtered;
         }
@@ -55,6 +55,12 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<List<BankTransfer>> GetTransfersForPeriodForUserAsync(AppUser? user, DateOnly From, DateOnly To) {
+            if (user == null) return new List<BankTransfer>();
+
+            return await _context.Transfers.Include(t => t.Account).Where(t => t.Account.UserId == user.Id && From <= t.Moment && t.Moment <= To).ToListAsync();
         }
     }
 }

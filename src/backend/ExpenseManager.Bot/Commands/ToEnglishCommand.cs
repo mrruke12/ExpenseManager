@@ -15,7 +15,7 @@ namespace ExpenseManager.Bot.Commands {
 
         public async Task ExecuteAsync(TelegramBotClient bot, long chatId, long TelegramId, Update update) {
             var user = await _userRepository.GetByTelegramIdAsync(TelegramId);
-            var culture = user.LanguageCode = "en-EN";
+            var culture = user.LanguageCode = "en";
             await _userRepository.UpdateAsync(user);
 
             await bot.SendMessage(

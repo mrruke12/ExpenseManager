@@ -12,6 +12,8 @@ packages/
 *.log
 *.tmp
 *.db
+*.db-wal
+*.db-shm
 # Файлы окружения
 appsettings.json
 appsettings.*.json

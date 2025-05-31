@@ -1,0 +1,53 @@
+{
+  "AllowedHosts": "*",
+  "Kestrel": {
+    "Endpoints": {
+      "Https": {
+        "Url": "https://0.0.0.0:{backend-port}",
+        "Certificate": {
+          "Path": "../../certificate.pfx",
+          "Password": "{certificate-password}"
+        }
+      }
+    }
+  },
+  "Jwt": {
+    "Key": "{encryption-key}",
+    "Issuer": "https://localhost:{backend-port}",
+    "Audience": "https://localhost:{backend-port}"
+  },
+  "API": {
+    "TGAPITOKEN": "{telegram-api-token}"
+  },
+  "Frontend": {
+    "Url": "https://localhost:{frontend-port}"
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source={db-name}.db",
+    "TelegramBotConnection": "https://t.me/{telegram-bot-name}"
+  },
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Debug",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Error"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": "{Timestamp:HH:mm:ss} [{Level}] {Message}{NewLine}{Tab}{Exception}"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/log-.log",
+          "rollingInterval": "Day"
+        }
+      }
+    ]
+  }
+}

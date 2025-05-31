@@ -39,5 +39,42 @@
     "analytics-benefit-4": "For any period",
     "analytics-benefit-5": "Comparison",
     "analytics-benefit-6": "Export to PDF, Excel"
+  },
+  "auth": {
+    "login-label": "Login",
+    "register-label": "Register",
+    "email-input-label": "Email",
+    "email-input-placeholder": "Enter your email",
+    "password-input-label": "Password",
+    "password-input-login-placeholder": "Enter your password",
+    "password-input-register-placeholder": "Create a strong password",
+    "password-verification-input-label": "Confirmation",
+    "password-verification-input-placeholder": "Repeat your password",
+    "submit-login": "Sign In",
+    "submit-register": "Sign Up",
+    "no-account-yet": "Don't have an account yet?",
+    "already-have-account": "Already registered?",
+    "login-quote": "Login is the first step to wealth!",
+    "register-quote": "Registration is the beginning of your journey to a million flies!",
+    "login-fail": "Login failed! Check your details and try again.",
+    "registration-fail": "Registration failed! Please try again later.",
+    "registration-conflict": "A user with this email already exists"
+  },
+  "validation": {
+    "email-absence": "Please enter your email!",
+    "email-error": "It seems you've entered an invalid email!",
+    "password-absence": "Please enter your password!",
+    "password-insufficient-length": "Password must be at least 6 characters long.",
+    "password-numbers-absence": "Password must contain numbers.",
+    "password-letters-absence": "Password must contain letters.",
+    "password-verification-fail": "Passwords do not match!"
+  },
+  "dashboard": {
+    "account-label": "Account:",
+    "new-account-option": "New account",
+    "default-account-option": "Select an account"
+  },
+  "404": {
+    "not-found": "Oops! Looks like you've mixed up all the flies!"
   }
 }

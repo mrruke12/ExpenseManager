@@ -25,16 +25,38 @@ namespace ExpenseManager.WebAPI.Controllers {
                 Ok(user);
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser(UpdateUserDto dto) {
+        [HttpGet("current-locale")]
+        public async Task<IActionResult> CurrentLocale() {
+            var user = await _userRepository.GetByClaimsAsync(User);
+
+            return user == null ?
+                NotFound() :
+                Ok(user.LanguageCode);
+        }
+
+        [HttpPut("current-locale")]
+        public async Task<IActionResult> UpdateUserLocale(ChangeLocaleDto dto) {
+            var user = await _userRepository.GetByClaimsAsync(User);
+
+            user = _userBuilder
+                .Reference(user)
+                .SetLanguageCode(dto.Locale)
+                .Build();
+
+
+            await _userRepository.UpdateAsync(user);
+            return Ok();
+        }
+
+        [HttpPut("update-password")]
+        public async Task<IActionResult> UpdateUserPassword(string Password) {
             var original = await _userRepository.GetByClaimsAsync(User);
             if (original == null) return NotFound();
 
-            if (dto.newPassword != dto.verification) return BadRequest();
 
             var user = _userBuilder
-                        .Reset(original)
-                        .SetPassword(dto.newPassword)
+                        .Reference(original)
+                        .SetPassword(Password)
                         .Build();
 
             await _userRepository.UpdateAsync(user);
@@ -53,6 +75,6 @@ namespace ExpenseManager.WebAPI.Controllers {
             return Ok();
         }
 
-        public record UpdateUserDto(string newPassword, string verification);
+        public record ChangeLocaleDto(string Locale);
     }
 }

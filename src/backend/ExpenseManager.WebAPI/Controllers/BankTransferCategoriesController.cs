@@ -22,12 +22,9 @@ namespace ExpenseManager.WebAPI.Controllers {
         [HttpGet]
         public async Task<IActionResult> GetUserCategories() {
             var user = await _userRepository.GetByClaimsAsync(User);
-
             var categories = await _bankTransferCategoryRepository.GetForUserAsync(user);
 
-            return categories != null ?
-                Ok(categories) :
-                BadRequest();
+            return Ok(categories);
         }
 
         [HttpGet("{id}")]
@@ -66,7 +63,7 @@ namespace ExpenseManager.WebAPI.Controllers {
             if (original == null) return BadRequest();
 
             var category = _bankTransferCategoryBuilder
-                            .Reset(original)
+                            .Reference(original)
                             .SetName(dto.name)
                             .Build();
 

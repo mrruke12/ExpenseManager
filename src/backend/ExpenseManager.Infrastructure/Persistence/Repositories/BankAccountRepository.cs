@@ -29,8 +29,8 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
             return true;
         }
 
-        public async Task<List<BankTransfer>?> GetAccountTransfersAsync(int id, AppUser? user, BankTransferFilter filter) {
-            if (user == null) return null;
+        public async Task<List<BankTransfer>> GetAccountTransfersAsync(int id, AppUser? user, BankTransferFilter filter) {
+            if (user == null) return new List<BankTransfer>();
 
             var allTransfers = (await _context.Accounts.Include(a => a.Transfers).FirstOrDefaultAsync(a => a.Id == id && a.UserId == user.Id)).Transfers;
             var filtered = FilterTransfers(allTransfers, filter);
@@ -40,7 +40,7 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
 
         private IEnumerable<BankTransfer> FilterTransfers(IEnumerable<BankTransfer> allTransfers, BankTransferFilter filter) {
             var filtered = allTransfers.Where(t =>
-                                                       (t.Moment.Ticks >= filter.FromDate.Ticks && t.Moment.Ticks <= filter.ToDate.Ticks) &&
+                                                       (t.Moment >= filter.FromDate && t.Moment <= filter.ToDate) &&
                                                        (t.Bill >= filter.MinBill && t.Bill <= filter.MaxBill));
 
             if (filter.CategoryId != -1) filtered = filtered.Where(t => t.Category.Id == filter.CategoryId);
@@ -54,14 +54,14 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
             return await _context.Accounts.FirstOrDefaultAsync(a => a.Id == id && a.UserId == user.Id);
         }
 
-        public async Task<BankAccount?> GetByNameForUserAsync(AppUser user, string name) {
+        public async Task<BankAccount?> GetByNameForUserAsync(AppUser? user, string name) {
             if (user == null) return null;
 
-            return await _context.Accounts.FirstOrDefaultAsync(a => a.Name == name && a.UserId == user.Id);
+            return await _context.Accounts.FirstOrDefaultAsync(a => a.Name.ToLower().Trim() == name.ToLower().Trim() && a.UserId == user.Id);
         }
 
-        public async Task<List<BankAccount>?> GetByUserAsync(AppUser user) {
-            if (user == null) return null;
+        public async Task<List<BankAccount>> GetByUserAsync(AppUser? user) {
+            if (user == null) return new List<BankAccount>();
 
             return await _context.Accounts.Where(a => a.UserId == user.Id).ToListAsync();
         }

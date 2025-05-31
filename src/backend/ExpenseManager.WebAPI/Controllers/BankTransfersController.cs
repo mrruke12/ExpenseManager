@@ -31,18 +31,17 @@ namespace ExpenseManager.WebAPI.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTransfer(CreateBankTransferDto dto) {
+        public async Task<IActionResult> CreateTransfer(BankTransferDto dto) {
             var user = await _userRepository.GetByClaimsAsync(User);
 
             var account = await _bankAccountRepository.GetByIdForUserAsync(user, dto.AccountId);
-            var category = await _bankTransferCategoryRepository.GetByIdForUserAsync(user, dto.CategoryId);
-            if (category == null || account == null) return BadRequest();
+            if (account == null) return BadRequest();
 
             var transfer = _bankTransferBuilder
                            .Reset()
                            .SetAccountId(dto.AccountId)
                            .SetMoment(dto.Moment)
-                           .SetCategory(category)
+                           .SetCategoryId(dto.CategoryId)
                            .SetBill(dto.Bill)
                            .SetDescription(dto.Description)
                            .Build();
@@ -59,37 +58,32 @@ namespace ExpenseManager.WebAPI.Controllers {
             var user = await _userRepository.GetByClaimsAsync(User);
             var transfer = await _bankTransferRepository.GetByIdForUser(user, id);
 
-            if (transfer != null) {
-                ApplyTransfer(user, transfer);
-                return Ok(transfer);
-            }
+            if (transfer == null) return NotFound();
 
-            return NotFound();
+            await ApplyTransfer(user, transfer);
+            return Ok(transfer);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTransferForUser(int id, TransferUpdateDto dto) {
+        public async Task<IActionResult> UpdateTransferForUser(int id, BankTransferDto dto) {
             var user = await _userRepository.GetByClaimsAsync(User);
             var original = await _bankTransferRepository.GetByIdForUser(user, id);
 
-            var category = await _bankTransferCategoryRepository.GetByIdForUserAsync(user, dto.CategoryId);
-            if (category == null) return BadRequest();
+            if (original == null) return BadRequest();
 
             var transfer = _bankTransferBuilder
-                           .Reset(original)
+                           .Reference(original)
                            .SetMoment(dto.Moment)
-                           .SetCategory(category)
+                           .SetCategoryId(dto.CategoryId)
                            .SetBill(dto.Bill)
                            .SetDescription(dto.Description)
                            .Build();
 
-            if (await _bankTransferRepository.UpdateForUserAsync(user, transfer) == true) {
-                CancelTransfer(user, original);
-                ApplyTransfer(user, transfer);
-                return Ok();
-            }
-
-            return BadRequest();
+            if (await _bankTransferRepository.UpdateForUserAsync(user, transfer) != true) return BadRequest();
+            
+            await CancelTransfer(user, original);
+            await ApplyTransfer(user, transfer);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -97,12 +91,11 @@ namespace ExpenseManager.WebAPI.Controllers {
             var user = await _userRepository.GetByClaimsAsync(User);
             var transfer = await _bankTransferRepository.GetByIdForUser(user, id);
 
-            if (await _bankTransferRepository.DeleteForUser(user, id) == true) {
-                CancelTransfer(user, transfer);
-                return Ok();
-            }
-
-            return BadRequest();
+            if (transfer == null) return BadRequest();
+            if (await _bankTransferRepository.DeleteForUser(user, id) != true) return BadRequest();
+            
+            await CancelTransfer(user, transfer);
+            return Ok();                 
         }
 
         private async Task ApplyTransfer(AppUser user, BankTransfer transfer) {
@@ -117,7 +110,6 @@ namespace ExpenseManager.WebAPI.Controllers {
             await _bankAccountRepository.UpdateForUserAsync(user, account);
         }
 
-        public record TransferUpdateDto(DateTime Moment, int CategoryId, int Bill, string Description);
-        public record CreateBankTransferDto(int AccountId, DateTime Moment, int CategoryId, int Bill, string Description);
+        public record BankTransferDto(int AccountId, DateTime Moment, int CategoryId, int Bill, string Description);
     }
 }

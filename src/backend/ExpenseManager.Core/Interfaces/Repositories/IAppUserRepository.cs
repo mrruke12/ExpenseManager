@@ -12,6 +12,6 @@ namespace ExpenseManager.Core.Interfaces.Repositories {
         Task<AppUser?> ValidateLoginAsync(string email, string password);
         Task<AppUser?> GetByClaimsAsync(ClaimsPrincipal claims);
         Task<string> GetCultureAsync(long id);
-        Task<AppUser?> GetByEmailWithAttachmentsAsync(string email);
+        Task<AppUser?> GetByClaimsWithAttachmentsAsync(ClaimsPrincipal claims);
     }
 }

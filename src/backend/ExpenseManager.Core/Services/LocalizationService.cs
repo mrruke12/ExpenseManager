@@ -7,14 +7,14 @@ namespace ExpenseManager.Core.Services {
 
         public LocalizationService() {
             LocalizationResources = new Dictionary<string, ILocalizationResource>();
-            LocalizationResources["en-EN"] = new EnLocalization();
-            LocalizationResources["ru-RU"] = new RuLocalization();
+            LocalizationResources["en"] = new EnLocalization();
+            LocalizationResources["ru"] = new RuLocalization();
         }
 
         public ILocalizationResource this[string? languageCode] {
             get {
                 if (LocalizationResources.ContainsKey(languageCode == null ? "" : languageCode)) return LocalizationResources[languageCode];
-                else return LocalizationResources["en-EN"];
+                else return LocalizationResources["en"];
             }
         }
     }

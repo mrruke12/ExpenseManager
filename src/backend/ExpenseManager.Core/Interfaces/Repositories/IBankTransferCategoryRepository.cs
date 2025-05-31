@@ -2,7 +2,7 @@
 
 namespace ExpenseManager.Core.Interfaces.Repositories {
     public interface IBankTransferCategoryRepository {
-        Task<List<BankTransferCategory>?> GetForUserAsync(AppUser? user);
+        Task<List<BankTransferCategory>> GetForUserAsync(AppUser? user);
         Task<BankTransferCategory?> GetByIdForUserAsync(AppUser? user, int id);
         Task<BankTransferCategory?> GetByNameForUserAsync(AppUser? user, string name);
         Task<BankTransferCategory> AddAsync(BankTransferCategory category);

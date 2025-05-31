@@ -32,6 +32,11 @@ namespace ExpenseManager.Infrastructure.Persistence {
                 .WithOne(t => t.Account)
                 .HasForeignKey(t => t.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BankTransfer>()
+                .HasOne(t => t.Category)
+                .WithMany()
+                .HasForeignKey(t => t.CategoryId);
         }
     }
 }

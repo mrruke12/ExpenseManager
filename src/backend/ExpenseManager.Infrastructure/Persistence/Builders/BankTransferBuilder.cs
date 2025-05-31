@@ -15,6 +15,7 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
                     Id = prototype.Id,
                     Moment = prototype.Moment,
                     Category = prototype.Category,
+                    CategoryId = prototype.CategoryId,
                     Bill = prototype.Bill,
                     Description = prototype.Description,
                     //UserId = prototype.UserId,
@@ -22,6 +23,11 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
                 };
             }
 
+            return this;
+        }
+
+        public IBankTransferBuilder Reference(BankTransfer prototype) {
+            Transfer = prototype;
             return this;
         }
 
@@ -35,13 +41,18 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
             return this;
         }
 
-        public IBankTransferBuilder SetCategory(BankTransferCategory category) {
-            Transfer.Category = category;
+        public IBankTransferBuilder SetCategoryId(int categoryId) {
+            Transfer.CategoryId = categoryId;
+            return this;
+        }
+
+        public IBankTransferBuilder SetMoment(DateOnly date) {
+            Transfer.Moment = date;
             return this;
         }
 
         public IBankTransferBuilder SetMoment(DateTime dateTime) {
-            Transfer.Moment = dateTime;
+            Transfer.Moment = DateOnly.FromDateTime(dateTime);
             return this;
         }
 

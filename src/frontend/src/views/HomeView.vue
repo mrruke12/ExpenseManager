@@ -1,9 +1,8 @@
 <template>
-    <container-component Home>
+    <container-component Home Sticky>
 
         <!-- Баннер с Кермитом -->
-        <div
-            class="flex flex-col items-center md:flex-row pt-5 px-10 bg-linear-to-b from-amber-100 from-10% via-amber-200 via-30% to-blue-100 to-90%">
+        <div class="flex flex-col items-center md:flex-row pt-5 px-10 bg-blue-100">
             <div class="border-l-[30px] border-emerald-500 min-h-full pl-10 relative w-full mb-5 md:m-0">
                 <svg width="20%" height="20%" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
                     <path class="fill-emerald-900"
@@ -21,12 +20,12 @@
         <div>
             <slider-component sliderId="slider1">
                 <template #slide-0>
-                    <div class="w-full min-h-[500px] md:min-h-[600px] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-lime-50 to-green-50 relative overflow-hidden">
+                    <div class="w-full flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-lime-50 to-green-50 relative overflow-hidden" style="min-height: calc(100vh - 78.75px);">
                         <div class="absolute top-10 left-10 w-16 h-16 md:w-20 md:h-20 bg-green-300 rounded-full opacity-20"></div>
                         <div class="absolute bottom-10 right-10 w-24 h-24 md:w-32 md:h-32 bg-green-200 rounded-full opacity-30"></div>
 
                         <div class="relative z-10 w-full max-w-4xl">
-                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 justify-center">
                                 <div class="flex-shrink-0">
                                     <div class="bg-green-100 p-4 md:p-6 rounded-2xl shadow-lg border-4 border-green-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 md:h-16 md:w-16 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,7 +61,7 @@
 
                 <template #slide-1>
                     <div
-                        class="w-full min-h-[500px] md:min-h-[600px] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-teal-50 to-blue-50 relative overflow-hidden">
+                        class="w-full flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-teal-50 to-blue-50 relative overflow-hidden" style="min-height: calc(100vh - 78.75px);">
                         <div
                             class="absolute top-0 right-0 w-24 h-24 md:w-40 md:h-40 bg-teal-200 rounded-full opacity-20">
                         </div>
@@ -71,7 +70,7 @@
                         </div>
 
                         <div class="relative z-10 w-full max-w-4xl">
-                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 justify-center">
                                 <div class="flex-shrink-0">
                                     <div class="bg-blue-100 p-4 md:p-6 rounded-2xl shadow-lg border-4 border-blue-200">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +133,7 @@
 
                 <template #slide-2>
                     <div
-                        class="w-full min-h-[500px] md:min-h-[600px] flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-purple-50 to-indigo-50 relative overflow-hidden">
+                        class="w-full flex items-center justify-center p-4 sm:p-6 md:p-10 bg-gradient-to-br from-purple-50 to-indigo-50 relative overflow-hidden" style="min-height: calc(100vh - 78.75px);">
                         <div
                             class="absolute bottom-0 right-0 w-32 h-32 md:w-48 md:h-48 bg-purple-200 rounded-full opacity-20">
                         </div>
@@ -143,7 +142,7 @@
                         </div>
 
                         <div class="relative z-10 w-full max-w-4xl">
-                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 justify-center">
                                 <div class="flex-shrink-0">
                                     <div
                                         class="bg-purple-100 p-4 md:p-6 rounded-2xl shadow-lg border-4 border-purple-200">

@@ -71,7 +71,9 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
             return user;
         }
 
-        public async Task<AppUser?> GetByEmailWithAttachmentsAsync(string email) {
+        public async Task<AppUser?> GetByClaimsWithAttachmentsAsync(ClaimsPrincipal claims) {
+            var email = claims.FindFirst("Email")?.Value ?? "";
+
             return await _context.Users.Include(u => u.Categories)
                                        .Include(u => u.Accounts)
                                        .ThenInclude((BankAccount a) => a.Transfers)

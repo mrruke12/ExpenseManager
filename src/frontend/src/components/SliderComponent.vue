@@ -38,7 +38,6 @@ const slide = () => {
 
     slideRefs.value.forEach((s, index) => {
         xshift.value = 100*progress
-        console.log(xshift.value)
         s.style.translate = `-${xshift.value}%`
     })
 }
@@ -58,10 +57,10 @@ onMounted(() => {
 @reference 'tailwindcss';
 
 .slider {
-    @apply overflow-hidden flex;
+    @apply overflow-hidden flex relative;
 }
 
 .slide {
-    @apply flex-none w-full min-h-full transition duration-1000 ease-in-out;
+    @apply flex-none w-full transition duration-1000 ease-in-out;
 }
 </style>

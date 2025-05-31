@@ -22,14 +22,9 @@ namespace ExpenseManager.WebAPI.Controllers {
         [HttpGet]
         public async Task<IActionResult> GetUserAccounts() {
             var user = await _userRepository.GetByClaimsAsync(User);
-
-            if (user == null) return NotFound();
-
             var accounts = await _bankAccountRepository.GetByUserAsync(user);
 
-            return accounts != null ?
-                Ok(accounts) :
-                BadRequest();
+            return Ok(accounts);
         }
 
         [HttpGet("{id}")]
@@ -44,10 +39,9 @@ namespace ExpenseManager.WebAPI.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> CreateAccount(BankAccountCreateDto dto) {
+            if (string.IsNullOrEmpty(dto.name)) return BadRequest();
+            
             var user = await _userRepository.GetByClaimsAsync(User);
-
-            if (user == null) return NotFound();
-
             var existing = await _bankAccountRepository.GetByNameForUserAsync(user, dto.name);
 
             if (existing != null) return Conflict();
@@ -71,7 +65,7 @@ namespace ExpenseManager.WebAPI.Controllers {
             if (original == null) return NotFound();
 
             var account = _bankAccountBuilder
-                          .Reset(original)
+                          .Reference(original)
                           .SetName(dto.name)
                           .Build();
 
@@ -83,6 +77,7 @@ namespace ExpenseManager.WebAPI.Controllers {
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(int id) {
             var user = await _userRepository.GetByClaimsAsync(User);
+
             return await _bankAccountRepository.DeleteForUserAsync(user, id) == true ?
                 Ok(user) :
                 BadRequest();

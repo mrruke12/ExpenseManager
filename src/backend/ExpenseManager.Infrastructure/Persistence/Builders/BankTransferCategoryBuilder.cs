@@ -21,6 +21,11 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
             return this;
         }
 
+        public IBankTransferCategoryBuilder Reference(BankTransferCategory prototype) {
+            Category = prototype; 
+            return this;
+        }
+
         public IBankTransferCategoryBuilder SetName(string name) {
             Category.Name = name.ToLower().Trim();
 

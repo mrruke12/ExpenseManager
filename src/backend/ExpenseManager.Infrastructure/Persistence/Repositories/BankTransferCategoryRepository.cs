@@ -32,13 +32,11 @@ namespace ExpenseManager.Infrastructure.Persistence.Repositories {
         public async Task<BankTransferCategory?> GetByNameForUserAsync(AppUser? user, string name) {
             if (user == null) return null;
 
-            name = name.ToLower().Trim();
-
-            return await _context.TransfersCategories.FirstOrDefaultAsync(c => c.Name == name && c.UserId == user.Id);
+            return await _context.TransfersCategories.FirstOrDefaultAsync(c => c.Name.ToLower().Trim() == name.ToLower().Trim() && c.UserId == user.Id);
         }
 
-        public async Task<List<BankTransferCategory>?> GetForUserAsync(AppUser? user) {
-            if (user == null) return null;
+        public async Task<List<BankTransferCategory>> GetForUserAsync(AppUser? user) {
+            if (user == null) return new List<BankTransferCategory>();
 
             return await _context.TransfersCategories.Where(c => c.UserId == user.Id).ToListAsync();
         }

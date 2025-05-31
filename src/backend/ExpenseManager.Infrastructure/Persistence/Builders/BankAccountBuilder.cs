@@ -23,6 +23,11 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
             return this;
         }
 
+        public IBankAccountBuilder Reference(BankAccount prototype) {
+            Account = prototype;
+            return this;
+        }
+
         public IBankAccountBuilder SetName(string name) {
             Account.Name = name;
             return this;

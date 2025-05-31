@@ -21,7 +21,7 @@ namespace ExpenseManager.WebAPI.Controllers {
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto) {
+        public async Task<IActionResult> Login(AuthDto dto) {
             var user = await _userRepository.ValidateLoginAsync(dto.Email, dto.Password);
 
             if (user == null) return Unauthorized();
@@ -31,11 +31,10 @@ namespace ExpenseManager.WebAPI.Controllers {
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto) {
+        public async Task<IActionResult> Register(AuthDto dto) {
             var existing = await _userRepository.GetByEmailAsync(dto.Email);
 
             if (existing != null) return Conflict();
-            if (dto.Password != dto.Verification) return BadRequest();
 
             var user = _userBuilder.Reset()
                        .SetEmail(dto.Email)
@@ -56,8 +55,6 @@ namespace ExpenseManager.WebAPI.Controllers {
                 NotFound() :
                 Ok(new { LoginLink = $"{_configuration["ConnectionStrings:TelegramBotConnection"]}?start={String.Join("", user.Id.Reverse())}" });
         }
-
-        public record RegisterDto(string Email, string Password, string Verification);
-        public record LoginDto(string Email, string Password);
+        public record AuthDto(string Email, string Password);
     }
 }

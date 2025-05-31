@@ -9,6 +9,11 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
             return User;
         }
 
+        public IAppUserBuilder Reference(AppUser prototype) {
+            User = prototype;
+            return this;
+        }
+
         public IAppUserBuilder Reset(AppUser? prototype = null) {
             if (prototype == null) User = new AppUser();
             else {

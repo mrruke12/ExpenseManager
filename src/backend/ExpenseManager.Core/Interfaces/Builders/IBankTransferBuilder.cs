@@ -3,8 +3,9 @@
 namespace ExpenseManager.Core.Interfaces.Builders {
     public interface IBankTransferBuilder {
         IBankTransferBuilder Reset(BankTransfer? prototype = null);
+        IBankTransferBuilder Reference (BankTransfer prototype);
         IBankTransferBuilder SetMoment(DateTime dateTime);
-        IBankTransferBuilder SetCategory(BankTransferCategory category);
+        IBankTransferBuilder SetCategoryId(int categoryId);
         IBankTransferBuilder SetBill(int bill);
         IBankTransferBuilder SetDescription(string description);
         //IBankTransferBuilder SetUserId(string id);
