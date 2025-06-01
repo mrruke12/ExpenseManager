@@ -22,7 +22,7 @@ namespace ExpenseManager.Infrastructure.Persistence.Builders {
         }
 
         public IBankTransferCategoryBuilder Reference(BankTransferCategory prototype) {
-            Category = prototype; 
+            Category = prototype;
             return this;
         }
 

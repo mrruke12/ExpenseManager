@@ -1,6 +1,7 @@
 ﻿using ExpenseManager.Core.Entities;
 using ExpenseManager.Core.Interfaces.Builders;
 using ExpenseManager.Core.Interfaces.Repositories;
+using ExpenseManager.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +15,17 @@ namespace ExpenseManager.WebAPI.Controllers {
         private readonly IBankTransferBuilder _bankTransferBuilder;
         private readonly IBankAccountRepository _bankAccountRepository;
         private readonly IBankTransferCategoryRepository _bankTransferCategoryRepository;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IBankTransferCategoryBuilder _bankTransferCategoryBuilder;
 
-        public BankTransfersController(IAppUserRepository userRepository, IBankTransferRepository bankTransferRepository, IBankTransferBuilder bankTransferBuilder, IBankAccountRepository bankAccountRepository, IBankTransferCategoryRepository bankTransferCategoryRepository) {
+        public BankTransfersController(IAppUserRepository userRepository, IBankTransferRepository bankTransferRepository, IBankTransferBuilder bankTransferBuilder, IBankAccountRepository bankAccountRepository, IBankTransferCategoryRepository bankTransferCategoryRepository, IWebHostEnvironment environment, IBankTransferCategoryBuilder bankTransferCategoryBuilder) {
             _userRepository = userRepository;
             _bankTransferRepository = bankTransferRepository;
             _bankTransferBuilder = bankTransferBuilder;
             _bankAccountRepository = bankAccountRepository;
             _bankTransferCategoryRepository = bankTransferCategoryRepository;
+            _environment = environment;
+            _bankTransferCategoryBuilder = bankTransferCategoryBuilder;
         }
 
         [HttpGet]
@@ -80,7 +85,7 @@ namespace ExpenseManager.WebAPI.Controllers {
                            .Build();
 
             if (await _bankTransferRepository.UpdateForUserAsync(user, transfer) != true) return BadRequest();
-            
+
             await CancelTransfer(user, original);
             await ApplyTransfer(user, transfer);
             return Ok();
@@ -93,9 +98,61 @@ namespace ExpenseManager.WebAPI.Controllers {
 
             if (transfer == null) return BadRequest();
             if (await _bankTransferRepository.DeleteForUser(user, id) != true) return BadRequest();
-            
+
             await CancelTransfer(user, transfer);
-            return Ok();                 
+            return Ok();
+        }
+
+        [RequestSizeLimit(1_000_000)]
+        [HttpPost("pdf/{accountId}")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadPdf(int accountId, [FromForm] IFormFile pdfFile) {
+            if (pdfFile == null || pdfFile.Length == 0) {
+                return BadRequest("No file uploaded");
+            }
+
+            // Проверка расширения файла
+            var extension = Path.GetExtension(pdfFile.FileName).ToLowerInvariant();
+            if (extension != ".pdf") {
+                return BadRequest("Only PDF files are allowed");
+            }
+
+            try {
+                // Сохранение файла на сервере
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+                if (!Directory.Exists(uploadsFolder)) {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + pdfFile.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+                    await pdfFile.CopyToAsync(fileStream);
+                }
+
+                var user = await _userRepository.GetByClaimsAsync(User);
+                var category = await _bankTransferCategoryRepository.GetByNameForUserAsync(user, "kaspi");
+                if (category == null) category = await _bankTransferCategoryRepository.AddAsync(_bankTransferCategoryBuilder
+                    .Reset()
+                    .SetUserId(user.Id)
+                    .SetName("kaspi")
+                    .Build());
+
+                var res = new PdfService().ImportFromKaspiRu(filePath, accountId, category.Id, _bankTransferBuilder);
+                foreach (var t in res) {
+                    await _bankTransferRepository.AddAsync(t);
+                }
+
+                // Удаление файла после обработки
+                if (System.IO.File.Exists(filePath)) {
+                    System.IO.File.Delete(filePath);
+                }
+
+                return Ok(res);
+            } catch (Exception ex) {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
 
         private async Task ApplyTransfer(AppUser user, BankTransfer transfer) {

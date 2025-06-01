@@ -75,7 +75,8 @@
     "transfer-amount-float-error": "Transfer amount must be a whole number.",
     "category-error": "You haven't selected a category! Try creating a new category and selecting it.",
     "transfer-date-type-violation": "Transfer date is not set!",
-    "transfer-date-future-error": "Transfer date cannot be in the future."
+    "transfer-date-future-error": "Transfer date cannot be in the future.",
+    "file-error": "File is not chosen"
   },
   "dashboard": {
     "account-label": "Account:",
@@ -104,6 +105,7 @@
     "total-expenses": "Expenses:",
     "income": "Income",
     "expenses": "Expenses",
+    "balance": "Balance",
     "no-description": "-",
     "transfer-id": "unique ID:",
     "edit": "Edit",
@@ -136,7 +138,11 @@
         "update-transfer-button": "Edit Transfer",
         "update-account-button": "Edit Account",
         "update-category-button": "Edit Category",
-        "are-you-sure": "Are you sure?"
+        "are-you-sure": "Are you sure?",
+        "upload-kaspi-button": "Import",
+        "upload-kaspi-title": "Import from Kaspi.kz (Report should be in russian)",
+        "upload-pdf-instruction-1": "Click to upload",
+        "upload-pdf-instruction-2": "PDF up to 1MB"
     }
   },
   "404": {

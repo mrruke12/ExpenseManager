@@ -40,7 +40,7 @@ namespace ExpenseManager.WebAPI.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateAccount(BankAccountCreateDto dto) {
             if (string.IsNullOrEmpty(dto.name)) return BadRequest();
-            
+
             var user = await _userRepository.GetByClaimsAsync(User);
             var existing = await _bankAccountRepository.GetByNameForUserAsync(user, dto.name);
 

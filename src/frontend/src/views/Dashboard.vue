@@ -11,7 +11,7 @@
                             <select @change="handleAccountChange" v-model="currentAccount"
                                 class="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition appearance-none">
                                 <option class="italic text-gray-500" value="-2">{{ t('dashboard.default-account-option')
-                                    }}</option>
+                                }}</option>
                                 <option class="font-medium" v-for="(account, index) in accounts" :value="index">
                                     {{ account.name }}
                                 </option>
@@ -110,8 +110,8 @@
 
                         <!-- Period Picker -->
                         <div class="pb-3">
-                            <div class="flex items-center space-x-2">
-                                <div class="relative flex-1">
+                            <div class="flex items-center md:space-x-2 flex-col md:flex-row">
+                                <div class="relative flex-1 w-full">
                                     <select v-model="period" @change="handlePeriodSelection"
                                         class="w-full pl-4 pr-10 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition appearance-none">
                                         <option value="all">{{ t('dashboard.period-all-option') }}</option>
@@ -130,7 +130,7 @@
                                 </div>
 
                                 <div v-if="period !== 'all' && period !== 'custom'"
-                                    class="flex items-center bg-white rounded-xl border border-gray-200">
+                                    class="flex items-center justify-between bg-white rounded-xl border border-gray-200 md:w-[300px] w-full">
                                     <button @click="changeMilestone(-1)"
                                         class="p-2 text-gray-500 hover:text-amber-500 transition">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
@@ -210,8 +210,9 @@
                 <div v-else class="flex-1 overflow-auto">
                     <!-- Dashboard Page -->
                     <div v-if="currentAccount >= 0 && page === 0" class="p-6 space-y-6">
-                        <div class="bg-white rounded-2xl shadow-sm p-5 h-80">
-                            <canvas ref="chartCanvas" class="w-full h-full"></canvas>
+
+                        <div class="bg-white rounded-2xl shadow-sm p-5 max-h-[600px]">
+                            <canvas ref="chartCanvas" class=" w-full h-full"></canvas>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -244,7 +245,7 @@
                                     </div>
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-500">{{ t('dashboard.total-expenses')
-                                            }}</h3>
+                                        }}</h3>
                                         <p class="text-2xl font-bold text-red-600">
                                             {{ Math.abs(accounts[currentAccount].outcome).toFixed(2) }}
                                         </p>
@@ -288,14 +289,26 @@
                             </div>
                         </div>
 
-                        <button @click="modalView = 2"
-                            class="absolute bottom-2 right-2 w-14 h-14 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg flex items-center justify-center transition hover:shadow-xl hover:scale-105">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                        </button>
+                        <div class="absolute bottom-2 right-2 flex space-x-2">
+                            <button @click="modalView = 6"
+                                class="w-14 h-14 bg-[#F14635] hover:bg-red-600 text-white rounded-full shadow-lg flex items-center justify-center transition hover:shadow-xl hover:scale-105">
+                                <svg fill="white" width="33" height="33" viewBox="0 0 33 33"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M16.7475 17.6513C19.6113 18.0934 19.9984 19.7879 20.2299 21.365L20.2685 21.6339L20.2948 21.8169L20.4342 22.745C20.707 24.5171 21.2762 28.1955 21.2762 30.115C21.2762 30.5947 21.234 30.9629 21.1569 31.1652C21.0284 31.477 20.654 31.7762 20.137 32.0256C18.8861 32.3335 17.5786 32.5 16.2318 32.5C16.0892 32.5 15.9489 32.4931 15.8081 32.4889C15.2638 32.3343 14.8547 32.0762 14.6381 31.7235C13.9841 30.6589 13.9447 28.287 13.9316 25.5152L13.9301 25.1937L13.9248 24.3629C13.9035 21.4286 13.8852 18.8986 14.9513 17.9907C15.3642 17.6415 15.9509 17.5259 16.7475 17.6513ZM10.5037 24.0398C11.1243 24.0049 11.5234 27.0574 11.6036 29.3721C11.6598 30.9836 11.4906 31.6465 11.2204 31.8845C10.9145 31.7824 10.6139 31.6719 10.3177 31.5519C10.1201 31.1928 9.96907 30.628 9.87312 29.8882C9.58018 27.5633 9.83465 24.0808 10.5037 24.0398ZM26.0622 28.6014C26.0235 28.8134 25.9689 28.9772 25.9016 29.1154C25.371 29.5412 24.8133 29.9321 24.2297 30.2838C24.0438 30.3151 23.8787 30.2933 23.798 30.1569C23.0245 28.7978 22.7342 24.5342 23.4827 24.1631C24.4586 23.6917 26.2069 27.8643 26.0622 28.6014ZM16.0008 0.5C24.7145 0.5 31.8006 7.40062 31.996 15.9873L32 16.2841V16.4213C31.984 20.3 30.5566 23.8486 28.205 26.5952C28.1197 26.5524 27.9641 26.4123 27.6822 25.9906C27.3905 25.5667 24.8749 21.6953 24.8749 17.2581C24.8749 16.3873 26.1301 15.027 27.2408 13.833C28.0711 12.9345 28.8576 12.087 29.1472 11.4209C29.5161 10.5614 29.258 9.96125 28.8498 9.75782C28.4803 9.57703 27.9256 9.7089 27.5363 10.4003C26.8975 11.5193 26.6928 11.7284 25.761 12.4771C24.8441 13.2254 23.3864 13.9787 23.3864 13.0036C23.3864 12.4771 24.1983 11.2847 24.5994 10.4489C25.009 9.60377 24.5675 8.99196 23.7217 8.99196C22.0608 8.99196 20.9583 11.1077 20.9583 11.8407C20.9583 12.5731 21.3136 12.6774 21.3136 13.5303C21.3136 14.3896 19.4913 15.5042 17.7747 15.5042C16.122 15.5042 15.1636 15.1697 14.7665 14.2273L14.7158 14.095L14.601 13.7554C14.1938 12.5653 13.9017 11.7022 13.3932 10.8002C13.1232 10.3232 12.7066 9.99252 12.3463 9.70156C11.8754 9.33579 11.6311 8.99901 11.5801 8.74784C11.5331 8.49865 11.5078 8.02904 12.3128 6.9465C13.1161 5.87014 13.2287 5.057 12.8267 4.63743C12.681 4.48817 12.4326 4.39254 12.1136 4.39254C11.5494 4.39254 10.7654 4.69149 9.95745 5.51265C8.7015 6.7996 9.41451 8.02149 9.41451 8.55788C9.41451 9.09392 9.18442 9.39713 8.43071 10.1264C7.67148 10.8589 7.40945 11.4869 7.32262 14.0109C7.28935 15.3114 7.06031 16.06 6.85471 16.7238C6.67705 17.3056 6.51366 17.8526 6.50483 18.6429C6.49076 19.5187 6.63654 20.0831 6.80666 20.7343C6.97369 21.3362 7.15109 22.0259 7.26475 23.1796C7.44553 24.9655 7.38268 26.4741 7.054 28.016L6.96628 28.4023L6.94578 28.5133C6.87847 28.7843 6.79846 29.1134 6.69031 29.2367C2.64076 26.3604 0 21.663 0 16.3531C0 7.59843 7.1635 0.5 16.0008 0.5Z" />
+                                </svg>
+                            </button>
+
+                            <button @click="modalView = 2"
+                                class="w-14 h-14 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg flex items-center justify-center transition hover:shadow-xl hover:scale-105">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </button>
+                        </div>
+
                     </div>
 
                     <!-- Categories Page -->
@@ -328,7 +341,7 @@
                                     <span class="text-sm font-medium"
                                         :class="!transferType ? 'text-green-600' : 'text-red-600'">
                                         {{ transfer.bill >= 0 ? `+${transfer.bill.toFixed(2)}` :
-                                        transfer.bill.toFixed(2) }}
+                                            transfer.bill.toFixed(2) }}
                                     </span>
                                 </div>
 
@@ -362,13 +375,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- <button @click="modalView = 4"
-                            class="absolute bottom-20 right-6 w-14 h-14 bg-amber-500 hover:bg-amber-600 text-white rounded-full shadow-lg flex items-center justify-center transition hover:shadow-xl hover:scale-105">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                        </button> -->
                     </div>
 
                     <!-- Empty States -->
@@ -406,10 +412,11 @@
                             {{
                                 modalView === 0 ? t('dashboard.modal.create-account-title') :
                                     modalView === 1 ? t('dashboard.modal.create-category-title') :
-                                        modalView == 2 ? t('dashboard.modal.create-transfer-title') :
-                                            modalView == 3 ? t('dashboard.modal.update-transfer-title') :
-                                                modalView == 4 ? t('dashboard.modal.update-account-title') :
-                                                    t('dashboard.modal.update-category-title')
+                                        modalView === 2 ? t('dashboard.modal.create-transfer-title') :
+                                            modalView === 3 ? t('dashboard.modal.update-transfer-title') :
+                                                modalView === 4 ? t('dashboard.modal.update-account-title') :
+                                                    modalview === 5 ? t('dashboard.modal.update-category-title') :
+                                                        t('dashboard.modal.upload-kaspi-title')
                             }}
                         </h2>
                         <p v-if="validationErrors.length === 0" class="mt-1 text-amber-100">
@@ -432,7 +439,7 @@
                         </div>
 
                         <!-- Category Name -->
-                        <div v-else-if="modalView === 1 || modalView == 5" class="space-y-2">
+                        <div v-else-if="modalView === 1 || modalView === 5" class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">
                                 {{ t('dashboard.modal.category-name-placeholder') }}
                             </label>
@@ -442,7 +449,7 @@
                         </div>
 
                         <!-- Transfer Form -->
-                        <div v-else class="space-y-4">
+                        <div v-else-if="modalView === 2 || modalView === 3" class="space-y-4">
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     {{ t('dashboard.modal.transfer-amount-label') }}
@@ -504,6 +511,28 @@
                             </div>
                         </div>
 
+                        <div v-else-if="modalView === 6">
+                            <label class="flex flex-col items-center justify-center w-full h-32 px-4 py-6 
+                                            border-2 border-dashed border-gray-300 rounded-lg 
+                                            cursor-pointer bg-gray-50 hover:bg-gray-100
+                                            transition-colors duration-200">
+                                <div class="flex flex-col items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p class="mt-2 text-sm text-gray-600">
+                                        {{ t("dashboard.modal.upload-pdf-instruction-1") }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">{{ t("dashboard.modal.upload-pdf-instruction-2") }}
+                                    </p>
+                                </div>
+                                <input type="file" @change="(e) => form.files = e.target.files" class="hidden"
+                                    accept=".pdf" />
+                            </label>
+                        </div>
+
                         <div class="m-auto w-full">
                             <button @disabled="isSubmitting" v-if="modalView == 4" @click="deleteAccount" type="button"
                                 class="disabled:bg-gray-100 w-full flex-1 py-3 px-4 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 bg-red-300 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 transition">
@@ -530,7 +559,8 @@
                                                 modalView === 2 ? t('dashboard.modal.create-transfer-button') :
                                                     modalView === 3 ? t('dashboard.modal.update-transfer-button') :
                                                         modalView === 4 ? t('dashboard.modal.update-account-button') :
-                                                            t('dashboard.modal.update-category-button')
+                                                            modalview === 5 ? t('dashboard.modal.update-category-button') :
+                                                                t('dashboard.modal.upload-kaspi-button')
                                     }}
                                 </span>
                                 <span v-else class="flex items-center justify-center">
@@ -602,26 +632,14 @@ const form = ref({
     categoryId: -1,
     amount: '',
     description: '',
-    date: new Date().toISOString().split('T')[0]
+    date: new Date().toISOString().split('T')[0],
+    files: []
 })
 
 // Chart ref
 const chartCanvas = ref(null)
 const chart = ref(null)
 
-// Computed
-// const currentCategoryTransfers = computed(() => {
-//     if (currentAccount.value < 0 || currentCategory.value < 0) return []
-
-//     const categoryId = getCategoryId(categories.value[currentCategory.value])
-//     if (categoryId < 0) return []
-
-//     return transferType.value ?
-//         accounts.value[currentAccount.value].categories[categoryId].transfers.outcome :
-//         accounts.value[currentAccount.value].categories[categoryId].transfers.income
-// })
-
-// Methods
 const handleAccountChange = () => {
     if (currentAccount.value == -1) {
         currentAccount.value = -2
@@ -834,9 +852,12 @@ const validateForm = () => {
 
         error = ValidateDate(form.value.date)
         if (error) validationErrors.value.push(error)
+    } else {
+        error = form.value.files.length == 0 ? t("validation.file-error") : false
+        if (error) validationErrors.value.push(error)
     }
 
-    return validationErrors.value.length === 0
+    return validationErrors.value.length == 0
 }
 
 const submitForm = async () => {
@@ -870,6 +891,14 @@ const submitForm = async () => {
             await api.put(`/accounts/${accounts.value[currentAccount.value].id}`, { name: form.value.accountName })
         } else if (modalView.value === 5) {
             await api.put(`/categories/${currentCategory.value}`, { name: form.value.categoryName })
+        } else {
+            const formData = new FormData();
+            formData.append('pdfFile', form.value.files[0]);
+            await api.post(`/transfers/pdf/${accounts.value[currentAccount.value].id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
         }
 
         setTimeout(async () => {
@@ -885,7 +914,6 @@ const submitForm = async () => {
                 'dashboard.modal.category-conflict-error'))
         } else {
             validationErrors.value.push(t('dashboard.modal.submit-fail'))
-            console.log(ex)
         }
     } finally {
         isSubmitting.value = false
@@ -899,20 +927,20 @@ const resetForm = () => {
         categoryId: -1,
         amount: '',
         description: '',
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        files: []
     }
+    validationErrors.value = []
 }
 
 const prepareData = () => {
     if (!user.value) return
 
-    categoriesMap.value = {}
-
-    // Reset data
     accounts.value = []
     categories.value = user.value.categories
 
     user.value.accounts.forEach((account, accountIndex) => {
+        categoriesMap.value = {}
         accounts.value.push({
             id: account.id,
             name: account.name,
@@ -958,7 +986,6 @@ const prepareData = () => {
         })
     })
 
-    // Calculate percentages
     accounts.value.forEach(account => {
         account.categories.forEach(category => {
             category.percentage = {
@@ -969,7 +996,8 @@ const prepareData = () => {
     })
 
     sortData()
-    updateCharts()
+
+    setTimeout(updateCharts, 100);
 }
 
 const sortData = () => {
@@ -989,7 +1017,6 @@ const fetchUserData = async () => {
         user.value = response.data
         prepareData()
 
-        // Initialize form categoryId if categories exist
         if (categories.value.length > 0) {
             form.value.categoryId = categories.value[0].id
         }
@@ -1000,7 +1027,7 @@ const fetchUserData = async () => {
     }
 }
 
-const paginate = (transfers) => {
+const generateSteps = (transfers) => {
     transfers = transfers.sort((a, b) => new Date(a.moment) - new Date(b.moment))
     let step = 'day'
 
@@ -1016,20 +1043,21 @@ const paginate = (transfers) => {
                 to: new Date(transfers[transfers.length - 1].moment),
                 milestone: new Date((new Date(transfers[0].moment) + new Date(transfers[transfers.length - 1].moment)) / 2)
             }
-            console.log()
+            currentPeriod.value.from = currentPeriod.value.from.setDate(currentPeriod.value.from.getDate() - 1)
         }
 
         const diff = Math.floor((currentPeriod.value.to - currentPeriod.value.from) / (1000 * 60 * 60 * 24))
 
-        if (diff >= 365 * 2) step = 'year'
-        if (diff >= 31) step = 'month'
+        if (diff >= 365) step = 'month'
+        else if (diff >= 31) step = 'month'
         else step = 'day'
     }
 
-    let steps = {}
+    let steps = []
 
     let left = new Date(currentPeriod.value.from)
     let right = new Date(currentPeriod.value.to)
+
     left.setHours(0, 0, 0, 0)
     right.setHours(23, 59, 59, 999)
 
@@ -1066,11 +1094,11 @@ const paginate = (transfers) => {
             border.setDate(border.getDate() + 1)
         }
 
-        steps[label] = 0
-
-        for (i; i < transfers.length && new Date(transfers[i].moment) < border; i++) {
-            steps[label] += Math.abs(transfers[i].bill)
-        }
+        steps.push({
+            label: label,
+            from: new Date(left),
+            to: new Date(border)
+        })
 
         left = new Date(border)
     }
@@ -1078,38 +1106,102 @@ const paginate = (transfers) => {
     return steps
 }
 
+const paginate = (transfers) => {
+    const steps = generateSteps([...transfers.income, ...transfers.outcome])
+
+    transfers.income = transfers.income.sort((a, b) => new Date(a.moment) - new Date(b.moment))
+    transfers.outcome = transfers.outcome.sort((a, b) => new Date(a.moment) - new Date(b.moment))
+
+    const incomeDataset = {}
+    const outcomeDataset = {}
+    const balanceDataset = {}
+
+    let i = 0
+    let o = 0
+    let balance = 0
+
+    steps.forEach(step => {
+        incomeDataset[step.label] = 0
+        outcomeDataset[step.label] = 0
+        balanceDataset[step.label] = 0
+
+        for (i; i < transfers.income.length; i++) {
+            const moment = new Date(transfers.income[i].moment)
+            if (moment < step.from) continue
+            if (moment > step.to) break
+            balance += transfers.income[i].bill
+            incomeDataset[step.label] += transfers.income[i].bill
+        }
+
+        for (o; o < transfers.outcome.length; o++) {
+            const moment = new Date(transfers.outcome[o].moment)
+            if (moment < step.from) continue
+            if (moment > step.to) break
+            balance += transfers.outcome[o].bill
+            outcomeDataset[step.label] -= transfers.outcome[o].bill
+        }
+
+        balanceDataset[step.label] = balance
+    })
+
+    return [incomeDataset, outcomeDataset, balanceDataset]
+}
+
+const destroyCharts = () => {
+    if (chart.value != null) {
+        chart.value.destroy()
+        chart.value = null
+    }
+}
+
 const createMainChart = () => {
     if (currentAccount.value < 0 || chartCanvas.value == null) return
-    if (chart.value != null) chart.value.destroy()
+    const datasets = paginate({ ...accounts.value[currentAccount.value].transfers })
+
 
     chart.value = new Chart(chartCanvas.value, {
-        type: 'line',
         data: {
             datasets: [{
+                type: 'line',
                 label: t('dashboard.income'),
-                data: paginate(accounts.value[currentAccount.value].transfers.income),
-                borderColor: '#10B981', // Зеленый цвет для доходов
+                data: datasets[0],
+                borderColor: '#10B981', 
                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                borderWidth: 3,
+                borderWidth: 1,
                 pointBackgroundColor: '#10B981',
                 pointBorderColor: '#fff',
                 pointRadius: 5,
                 pointHoverRadius: 7,
-                pointHitRadius: 10,
-                tension: 0.3, // Легкое сглаживание кривой
-                fill: true // Заливка под линией
+                pointHitRadius: 5,
+                tension: 0.5, 
+                fill: true 
             }, {
+                type: 'line',
                 label: t('dashboard.expenses'),
-                data: paginate(accounts.value[currentAccount.value].transfers.outcome),
-                borderColor: '#EF4444', // Красный цвет для расходов
+                data: datasets[1],
+                borderColor: '#EF4444', 
                 backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                borderWidth: 3,
+                borderWidth: 1,
                 pointBackgroundColor: '#EF4444',
                 pointBorderColor: '#fff',
                 pointRadius: 5,
                 pointHoverRadius: 7,
-                pointHitRadius: 10,
-                tension: 0.3,
+                pointHitRadius: 5,
+                tension: 0.5,
+                fill: true
+            }, {
+                type: 'line',
+                label: t('dashboard.balance'),
+                data: datasets[2],
+                borderColor: '#3260a8',
+                backgroundColor: 'rgba(50, 96, 168, 0.1)',
+                borderWidth: 1,
+                pointBackgroundColor: '#3260a8',
+                pointBorderColor: '#fff',
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointHitRadius: 5,
+                tension: 0,
                 fill: true
             }]
         },
@@ -1154,7 +1246,7 @@ const createMainChart = () => {
                     ticks: {
                         color: '#9CA3AF',
                         font: {
-                            size: 12
+                            size: 8
                         }
                     }
                 },
@@ -1166,16 +1258,16 @@ const createMainChart = () => {
                     ticks: {
                         color: '#9CA3AF',
                         font: {
-                            size: 12
+                            size: 8
                         },
                         callback: function (value) {
                             return value.toFixed(2);
                         }
-                    }
+                    },
                 }
             },
             animation: {
-                duration: 1000,
+                duration: 80,
                 easing: 'easeOutQuart'
             },
             interaction: {
@@ -1187,10 +1279,13 @@ const createMainChart = () => {
 }
 
 const updateCharts = () => {
-    createMainChart()
+    try {
+        destroyCharts()
+        createMainChart()
+    } catch (ex) {
+        return
+    }
 }
-
-// Lifecycle hooks
 onMounted(async () => {
     resetForm()
     await fetchUserData()
@@ -1198,7 +1293,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Custom transitions */
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s ease;

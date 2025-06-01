@@ -76,7 +76,8 @@
     "transfer-amount-float-error": "Сумма перевода должна быть целым числом.",
     "category-error": "Вы не выбрали категорию! Попробуйте создать новую категорию и выбрать ее.",
     "transfer-date-type-violation": "Дата перевода не задана!",
-    "transfer-date-future-error": "Дата перевода не должна быть позже настоящего времени."
+    "transfer-date-future-error": "Дата перевода не должна быть позже настоящего времени.",
+    "file-error": "Файл не выбран"
 },
   "dashboard": {
     "account-label": "Счет:",
@@ -105,6 +106,7 @@
     "total-expenses": "Расход:",
     "income": "Доход",
     "expenses": "Расход",
+    "balance": "Баланс",
     "no-description": "-",
     "transfer-id": "уникальный номер:",
     "edit": "Редактировать",
@@ -137,7 +139,11 @@
         "update-transfer-button": "Изменить перевод",
         "update-account-button": "Изменить счет",
         "update-category-button": "Изменить категорию",
-        "are-you-sure": "Вы уверены?"
+        "are-you-sure": "Вы уверены?",
+        "upload-kaspi-button": "Импортировать",
+        "upload-kaspi-title": "Импортировать из Kaspi.kz (Выписка должна быть на русском)",
+        "upload-pdf-instruction-1": "Загрузите нужный файл",
+        "upload-pdf-instruction-2": "PDF весом не более 1MB"
     }
   },
   "404": {
